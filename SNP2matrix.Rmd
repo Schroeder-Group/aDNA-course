@@ -1,0 +1,39 @@
+## Load packages
+```{r}
+library(readxl)
+library(tidyverse)
+```
+
+## Load reference SNPs data
+
+```{r}
+leprae_all_SNPs <- read_excel("mmc7.xlsx")
+```
+
+## Load Lola and outgroup SNPs data
+
+```{r}
+lola <- read_tsv(file = "Lola.SNPs2consensus.tsv",
+                 col_names = c("Referenece","Lola.Pos","Lola.REF","Lola.ALT"))
+add_leprae <- left_join(leprae_all_SNPs,lola,by=c("POS" = "Lola.Pos")) %>% 
+  mutate(Lola = ifelse(is.na(Lola.ALT),"-",Lola.ALT),
+         len_Lola = nchar(Lola.ALT),
+         len_ref = nchar(Lola.REF)) %>% 
+  dplyr::select(-c("Referenece","Lola.REF","Lola.ALT","len_ref","len_Lola")) 
+
+leprae_outgroup <- read_tsv("lepromatosis2leprae.SNPs2consensus.tsv",col_names = c("Referenece","lepromatosis.Pos","lepromatosis.REF","lepromatosis.ALT"))
+
+add_leprae <- left_join(add_leprae,leprae_outgroup,by=c("POS" = "lepromatosis.Pos")) %>% 
+  mutate(lepromatosis = ifelse(is.na(`lepromatosis.ALT`),"-",`lepromatosis.ALT`),
+         len_lepromatosis = nchar(`lepromatosis.ALT`),
+         len_lepromatosisref = nchar(`lepromatosis.REF`))%>% 
+  select(-c("Referenece","lepromatosis.REF","lepromatosis.ALT",len_lepromatosis,len_lepromatosisref))
+
+add_leprae %>% 
+  select(-c(POS,REF,ALT,EFF,Impact,Gene,Codon_change,A.acid_change)) %>% 
+  t(.) %>% 
+  as.data.frame(.) %>% 
+  rownames_to_column(.,var = "samples") %>% 
+  write_csv(.,file = "319publish_Lola_lepromatosis.csv")
+
+```
