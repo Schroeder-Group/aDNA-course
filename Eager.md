@@ -61,23 +61,21 @@ alias xjobs="xpjobs -u $USER"
 - Modify your .bashrc or .bash_profile script
     ```
     nano ~/.bashrc
-    ### or edit your .bash_profile
-    nano ~/.bash_profile
+
     ```
 - Copy and paste the following lines into your .bashrc or .bashprofile, remember to replace all the **USERID** to your KU-ID.
   ```
-  export TMPDIR='/projects/course_sgbb20001/scratch/USERID/tmp'
-  export TMP='/projects/course_sgbb20001/scratch/USERID/tmp'
-  export TEMP='/projects/course_sgbb20001/scratch/USERID/tmp'
-  mkdir -p $TMPDIR
-  export NXF_SINGULARITY_TMPDIR='/projects/course_sgbb20001/scratch/USERID/tmp'
-  export NXF_OPTS='-Djava.io.tmpdir=/projects/course_sgbb20001/scratch/USERID/tmp -Xms1g -Xmx4g'
-  export NXF_TEMP='/projects/course_sgbb20001/scratch/USERID/tmp'
-  export SINGULARITY_LOCALCACHEDIR='/projects/course_sgbb20001/scratch/USERID/tmp'
-  export SINGULARITY_TMPDIR='/projects/course_sgbb20001/scratch/USERID/tmp'
-  export SINGULARITY_LOCALCACHEDIR='/projects/course_sgbb20001/scratch/USERID/tmp'
-  export SINGULARITY_CACHEDIR='/projects/course_sgbb20001/scratch/USERID/tmp'
-  export SINGULARITY_TMPDIR='/projects/course_sgbb20001/scratch/$USER/tmp'
+  export TMPDIR='/projects/course_sgbb20001/USERID/tmp'
+  export TMP='/projects/course_sgbb20001/USERID/tmp'
+  export TEMP='/projects/course_sgbb20001/USERID/tmp'
+  export NXF_SINGULARITY_TMPDIR='/projects/course_sgbb20001/USERID/tmp'
+  export NXF_OPTS='-Djava.io.tmpdir=/projects/course_sgbb20001/USERID/tmp -Xms1g -Xmx4g'
+  export NXF_TEMP='/projects/course_sgbb20001/USERID/tmp'
+  export SINGULARITY_LOCALCACHEDIR='/projects/course_sgbb20001/USERID/tmp'
+  export SINGULARITY_TMPDIR='/projects/course_sgbb20001/USERID/tmp'
+  export SINGULARITY_LOCALCACHEDIR='/projects/course_sgbb20001/USERID/tmp'
+  export SINGULARITY_CACHEDIR='/projects/course_sgbb20001/USERID/tmp'
+  export SINGULARITY_TMPDIR='/projects/course_sgbb20001/USERID/tmp'
   mkdir -p $TMPDIR
   ```
 - Save the modified .bashrc or .bash_profile script by pressing **control X** and then **Y**. 
@@ -120,6 +118,7 @@ The detail description on those columns would be checked in [Eager website page]
 
 1. Remember once you are in Mjolnir, in the folder where you want to work, transfer the tsv file
 
+The raw data is located at "/projects/course_sgbb20001/people/hsf378/Raw/RawData.fastq.gz"
 
 2. Open a screen session in the folder where you want to work, by writing in the terminal:
 ```
@@ -133,18 +132,27 @@ module purge
 ```
 module load singularity/3.8.7 openjdk/11.0.0 nextflow/22.10.4
 ```
-5. run Eager with the following code:
+5. when you are running at your first time, you need to pull the eager:
+
 ```
-nextflow run nf-core/eager -r 2.4.6 -profile mjolnir_globe --input input.tsv --fasta /projects/course_sgbb20001/data/databases/Human/hs.build37.1.fasta --fasta_index /projects/course_sgbb20001/data/databases/Human/hs.build37.1.fasta.fai --bwa_index /projects/course_sgbb20001/data/databases/Human --seq_dict /projects/course_sgbb20001/data/databases/Human/hs.build37.1.dict --bam_unmapped_type fastq --bam_mapping_quality_threshold 30 --run_bedtools_coverage --anno_file /projects/course_sgbb20001/data/databases/Human/MT.bed --run_mtnucratio --run_bam_filtering --contamination_chrom_name X --mtnucratio_header MT -with-tower -c ../Eager_testing.config --run_nuclear_contamination --complexity_filter_poly_g -name XXX
+nextflow pull nf-core/eager
 ```
-6. To follow up the status, you can check in Nextflow tower
+6. run Eager with the following code:
+
+```
+nextflow run nf-core/eager -r 2.4.6 -profile mjolnir_globe --input input.tsv --fasta /projects/course_sgbb20001/data/databases/Human/hs.build37.1.fasta --fasta_index /projects/course_sgbb20001/data/databases/Human/hs.build37.1.fasta.fai --bwa_index /projects/course_sgbb20001/data/databases/Human --seq_dict /projects/course_sgbb20001/data/databases/Human/hs.build37.1.dict --bam_unmapped_type fastq --bam_mapping_quality_threshold 30 --run_bedtools_coverage --run_bam_filtering -with-tower -c /projects/course_sgbb20001/people/hsf378/Eager_testing.config --complexity_filter_poly_g -name XXX
+```
+
+7. To follow up the status, you can check in Nextflow tower
 
 If, an issue happens, and you see written 'failed', you can rerun your commands by adding at the end of the previous command '-resume'. It will run where it stops. You will have also to change the name.
 Please find below an example of the commands, if you need to rerun
+
 ```
-nextflow run nf-core/eager -r 2.4.6 -profile mjolnir_globe --input input.tsv --fasta /projects/course_sgbb20001/data/databases/Human/hs.build37.1.fasta --fasta_index /projects/course_sgbb20001/data/databases/Human/hs.build37.1.fasta.fai --bwa_index /projects/course_sgbb20001/data/databases/Human --seq_dict /projects/course_sgbb20001/data/databases/Human/hs.build37.1.dict --bam_unmapped_type fastq --bam_mapping_quality_threshold 30 --run_bedtools_coverage --anno_file /projects/course_sgbb20001/data/databases/Human/MT.bed --run_mtnucratio --run_bam_filtering --contamination_chrom_name X --mtnucratio_header MT -with-tower -c ../Eager_testing.config --run_nuclear_contamination --complexity_filter_poly_g -name YYY -resume
+nextflow run nf-core/eager -r 2.4.6 -profile mjolnir_globe --input input.tsv --fasta /projects/course_sgbb20001/data/databases/Human/hs.build37.1.fasta --fasta_index /projects/course_sgbb20001/data/databases/Human/hs.build37.1.fasta.fai --bwa_index /projects/course_sgbb20001/data/databases/Human --seq_dict /projects/course_sgbb20001/data/databases/Human/hs.build37.1.dict --bam_unmapped_type fastq --bam_mapping_quality_threshold 30 --run_bedtools_coverage --run_bam_filtering -with-tower -c /projects/course_sgbb20001/people/hsf378/Eager_testing.config --complexity_filter_poly_g -name YYY -resume
 ```
-7. In Nextflow tower, you should be to see if your run succeeded or not.
+
+8. In Nextflow tower, you should be to see if your run succeeded or not.
 
 If it succeeds, you should be able to see different statistics (e.g., fastqc, ect...).
 
@@ -152,7 +160,9 @@ You should safe the html files in your own folder. Then, you should open it with
 
 You have now the main statistic for your data. Certain colomns are more important than others such as: .....
 
-cd results folder/multiqc
+、、、
+cd results/multiqc
+、、、
 
 open html file with a browser
 
