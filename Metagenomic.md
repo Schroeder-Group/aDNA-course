@@ -136,7 +136,12 @@ After the exercise, you will be able to:
  scp /projects/course_sgbb20001/people/hsf378/metaphlan/MetaPhlanTop30Genera.png ./
 
  ```
+The top 30 abundance Genera bacteria/archaea hists on Lola sample, as the following figure. 
+<details><summary>Click</summary>
+
 ![The top 30 abundance Genera bacteria/archaea hists on Lola sample](https://github.com/Schroeder-Group/aDNA-course/blob/main/MetaPhlanTop30Genera.png)
+
+</details>
 
 ## Validation and Authentication
 
