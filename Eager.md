@@ -160,9 +160,9 @@ You should safe the html files in your own folder. Then, you should open it with
 
 You have now the main statistic for your data. Certain colomns are more important than others such as: .....
 
-、、、
+```
 cd results/multiqc
-、、、
+```
 
 open html file with a browser
 
