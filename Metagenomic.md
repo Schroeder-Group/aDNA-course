@@ -241,7 +241,7 @@ samtools view -c ../Bowtie2/Lola.vanilla.rmdup.bam
 samtools view -c Lola.reassigned.bam
 samtools view -c Lola.dedup.filtered.bam
 ```
-<details><summary>The details on metaDMG.sh</summary>
+<details><summary>click</summary>
  
 > 30251212 <br/>
 > 7154105 <br/>
