@@ -195,19 +195,22 @@ cp /projects/course_sgbb20001/people/hsf378/filterbam/filterbam.sh ./
 conda activate /projects/course_sgbb20001/data/envs/bam-filterV2/
 sbatch filterbam.sh
 ```
-<details><summary>Click</summary>
-```
-BAM_DIRECTORY=/projects/course_sgbb20001/people/hsf378/Bowtie2
-SAMPLE=Lola
 
-filterBAM reassign --bam $BAM_DIRECTORY/$SAMPLE.vanilla.rmdup.bam  --threads 10 \
+<details><summary>Click</summary>
+ 
+ ```
+ BAM_DIRECTORY=/projects/course_sgbb20001/people/hsf378/Bowtie2
+ SAMPLE=Lola
+
+ filterBAM reassign --bam $BAM_DIRECTORY/$SAMPLE.vanilla.rmdup.bam  --threads 10 \
         --iters 0 --min-read-ani 92 \
         --reference-lengths /projects/course_sgbb20001/data/databases/Vanilla/gtdb-r202-organelles-viruses.len.map \
         --out-bam $SAMPLE.reassigned.bam
       
-filterBAM filter --bam $SAMPLE.reassigned.bam --bam-filtered $SAMPLE.dedup.filtered.bam \
+ filterBAM filter --bam $SAMPLE.reassigned.bam --bam-filtered $SAMPLE.dedup.filtered.bam \
         --stats $SAMPLE.dedup.stats.tsv.gz --stats-filtered $SAMPLE.dedup.stats-filtered.tsv.gz --threads 10 --min-read-ani 92 --min-normalized-entropy 0.6
-```
+ ```
+
 </details>
 
 For example on the GIL-1 sample:
