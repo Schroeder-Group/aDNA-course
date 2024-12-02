@@ -208,7 +208,7 @@ filterBAM reassign --bam $BAM_DIRECTORY/$SAMPLE.vanilla.rmdup.bam  --threads 10 
 filterBAM filter --bam $SAMPLE.reassigned.bam --bam-filtered $SAMPLE.dedup.filtered.bam \
         --stats $SAMPLE.dedup.stats.tsv.gz --stats-filtered $SAMPLE.dedup.stats-filtered.tsv.gz --threads 10 --min-read-ani 92 --min-normalized-entropy 0.6
 ```
-<details>
+</details>
 
 For example on the GIL-1 sample:
 
