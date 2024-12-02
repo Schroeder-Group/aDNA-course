@@ -13,92 +13,15 @@ After the exercise, you will be able to:
 * Authenticate the target genomes based on damage pattern/edit distance/evenness coverage, etc
 * Generate the plot for the ancient metagenomic analysis
 
-## Preparation steps
-
-1. Let's create a folder and copy the toy datasets to your working folder.
-
-```
-mkdir -p ./metagenomic_workshop 
-cd ./metagenomic_workshop
-ln -s /projects/mjolnir1/people/hsf378/data/Metagenomic_workshop/raw .
-```
-
- <details><summary>Extend to check files within the folder</summary>
-
- GIL-1.fq.gz  
- HOR-1.fq.gz  
- MSW-2765.fq.gz
-
- </details>
-
-2. Install packages
-
-- <p><a href=https://github.com/biobakery/biobakery/wiki/metaphlan4> MetaPhlan4</a></p> 
- 
- ```
- # copy the directory of MetaPhlan 4 to your working directory.
- cp -r /projects/mjolnir1/people/hsf378/data/bin/MetaPhlAn-4.beta.1 .
- # activate the environment of MetaPhlan 3
- conda activate /projects/mjolnir1/apps/conda/metaphlan-3.0.14/
- # enter the metaphlan 4 folder
- cd /MetaPhlAn-4.beta.1
- # update the software to version 4 by using pip install
- pip install .
- ```
-- <p><a href=https://github.com/SegataLab/hclust2> hclust2</a></p> Hclust2 is a package for plotting the heat-maps, which could be applied to visualize the abundance of species across samples from the Metaphlan results.
- ```
- # create a conda environment for hclust2
- conda create --name hclust2
- # activate the environment
- conda activate hclust2
- # install packages for running hclust2
- conda install -c bioconda hclust2
- ```
-  or you could just copy and paste the preinstalled conda environment to your conda environment
- 
- ```
- cp -r /home/hsf378/.conda/envs/hclust2 /home/$USER-ID/.conda/envs
- conda activate hclust2
- ```
-
-- <p><a href=https://github.com/genomewalker/bam-filter> filterBAM</a></p> 
-
- ```
- # create a new conda environment for filterBAM
- conda create --name bam-filter
- # activate the environment
- conda activate bam-filter
- # install the packages required for running filterBAM
- conda install -c conda-forge -c bioconda -c genomewalker bam-filter
- ```
-  or you could just copy and paste the preinstalled conda environment to your conda environment
- 
- ```
- cp -r /home/hsf378/.conda/envs/bam-filter /home/$USER-ID/.conda/envs
- conda activate bam-filter
- ```
-- <p><a href=https://metadmg-dev.github.io/metaDMG-core/getting-started.html> metaDMG</a></p> 
- 
- ```
- # download the environment setting file for metaDMG
- wget https://github.com/metaDMG-dev/metaDMG-core/raw/main/environment.yaml 
- # install the packages required for running metaDMG and creat the corresponding conda environment
- conda env create --file environment.yaml
- ```
-  or you could just copy and paste the preinstalled conda environment to your conda environment
- 
- ```
- cp -r /home/hsf378/.conda/envs/metaDMG /home/$USER-ID/.conda/envs
- conda activate metaDMG
- ```
-
 ## Metagenomic screening
 
 1. Load the working environment and make a folder for the results 
  ```
- mkdir Metaphlan
- cd Metaphlan
+ mkdir metaphlan
+ cd metaphlan
+ cp /projects/course_sgbb20001/people/hsf378/metaphlan/Metaphlan.sh ./ 
  conda activate /projects/course_sgbb20001/data/envs/metaphlan4
+ sbatch Metaphlan.sh
  ```
 2. Run metagenomic screening on Metaphlan
  
@@ -163,38 +86,21 @@ ln -s /projects/mjolnir1/people/hsf378/data/Metagenomic_workshop/raw .
 3. Merge all output tables
  
  ```
- /projects/mjolnir1/people/hsf378/data/MetaPhlAn-4.beta.1/metaphlan/utils/merge_metaphlan_tables.py *.metaphlan4.txt > merge.metaphlan4.txt 
+ merge_metaphlan_tables.py Lola.metaphlan4.txt /projects/course_sgbb20001/people/hsf378/metaphlan/modern_ref/*metaphlan4.txt > merged_abundance_table.txt
  ```
 
  * Check the merged abundance file
   ```
   head merge.metaphlan4.txt
- ```
-
- <details><summary>Click</summary>
-
-  #mpa_v30_CHOCOPhlAn_201901 
- | clade_name | NCBI_tax_id | MSW-2765.metaphlan4 | HOR-1.metaphlan4 | GIL-1.metaphlan4 |
- | --- | --- | --- | --- | --- |
- | k__Archaea | 2157 | 0.07268 | 0.27318 | 0.13221 |
- | k__Archaea\|p__Candidatus_Bathyarchaeota | 2157\|928852 | 0.02647 | 0 | 0.01343 |
- | k__Archaea\|p__Candidatus_Bathyarchaeota\|c__Candidatus_Bathyarchaeota_unclassified | 2157\|928852\| | 0.02647 | 0 | 0.01343 |
- | k__Archaea\|p__Candidatus_Bathyarchaeota\|c__Candidatus_Bathyarchaeota_unclassified\|o__Candidatus_Bathyarchaeota_unclassified | 2157\|928852\|\| | 0.02647 | 0 | 0.01343 | 
- | k__Archaea\|p__Candidatus_Bathyarchaeota\|c__Candidatus_Bathyarchaeota_unclassified\|o__Candidatus_Bathyarchaeota_unclassified\|f__Candidatus_Bathyarchaeota_unclassified | 2157\|928852\|\|\| | 0.02647 | 0 | 0.01343 | 
- | k__Archaea\|p__Candidatus_Bathyarchaeota\|c__Candidatus_Bathyarchaeota_unclassified\|o__Candidatus_Bathyarchaeota_unclassified\|f__Candidatus_Bathyarchaeota_unclassified\|g__Candidatus_Bathyarchaeota_unclassified | 2157\|928852\|\|\|\| | 0.02647 | 0 | 0.01343 | 
- | k__Archaea\|p__Candidatus_Bathyarchaeota\|c__Candidatus_Bathyarchaeota_unclassified\|o__Candidatus_Bathyarchaeota_unclassified\|f__Candidatus_Bathyarchaeota_unclassified\|g__Candidatus_Bathyarchaeota_unclassified\|s__Candidatus_Bathyarchaeota_archaeon_CG_4_8_14_3_um_filter_42_8 | 2157\|928852\|\|\|\|\|1974384 | 0.02647 | 0 | 0 | 
- | k__Archaea\|p__Candidatus_Bathyarchaeota\|c__Candidatus_Bathyarchaeota_unclassified\|o__Candidatus_Bathyarchaeota_unclassified\|f__Candidatus_Bathyarchaeota_unclassified\|g__Candidatus_Bathyarchaeota_unclassified\|s__Candidatus_Bathyarchaeota_archaeon_RBG_13_46_16b | 2157\|928852\|\|\|\|\|1797378 | 0 | 0 | 0.01343 | 
-
- </details>
-
+  ```
  * Modify the output for the downstream visualization. 
  ```
- grep -E "(^ID)|(s__)" merge.metaphlan4.txt | grep -v "t__" | sed "s/.*s__//g" > modify.merge.metaphlan4.txt
- sed -n "2,2p" merge.metaphlan4.txt | cat - modify.merge.metaphlan4.txt | cut -f 1,3-5 | sed 's/.metaphlan4//g' > final.merge.metaphlan4.txt
+ grep -E "(^ID)|(g__)" merged_abundance_table.txt | grep -v "s__" | sed "s/.*g__//g" > merged_genera.txt
+ sed -n 2p merged_abundance_table.txt | cat - merged_genera.txt  | sed 's/.metaphlan4//g' > MetaPhlan_GeneraComparison.tsv
  ```
  * Check the modified abundance file
  ```
- head final.merge.metaphlan4.txt
+ head MetaPhlan_GeneraComparison.tsv
  ```
 
  <details><summary>Click</summary>
@@ -218,46 +124,44 @@ ln -s /projects/mjolnir1/people/hsf378/data/Metagenomic_workshop/raw .
  Here, hclust2 is applied to generate the heatmap plot for the merged metaphlan abundance profiles. 
 
  ```
- conda deactivate 
- conda activate /home/hsf378/.conda/envs/hclust2
- hclust2.py \
-  -i final.merge.metaphlan4.txt \
-  -o metaphlan4.sqrt_scale.png \
-  --ftop 50 \
-  --f_dist_f braycurtis \
-  --s_dist_f braycurtis \
-  --cell_aspect_ratio 0.5 \
-  -l --flabel_size 2 \
-  --max_flabel_len 100 \
-  --max_slabel_len 100 \
-  --slabel_size 2 \
-  --dpi 1000 \
+ module load hclust2
+
+ hclust2.py -i MetaPhlan_GeneraComparison.tsv -o MetaPhlanTop30Genera.png --f_dist_f braycurtis --s_dist_f braycurtis --cell_aspect_ratio 0.5 -l --flabel_size 10 --slabel_size 10 --max_flabel_len 100 --max_slabel_len 100 --dpi 1000 --ftop 30
+
  ```
  
 * Check the heatmap plot
  
  ```
- scp /projects/mjolnir1/people/hsf378/data/Metagenomic_workshop/Metaphlan/final.metaphlan4_add_viruses.png .
+ scp /projects/course_sgbb20001/people/hsf378/metaphlan/MetaPhlanTop30Genera.png ./
+
  ```
 
-> **Note:**
-> Here is the final results for the MetaPhlan 
->  ```
-> ln -s /projects/mjolnir1/people/hsf378/data/Metagenomic_workshop/Metaphlan/
->  ```
+The top 30 abundance Genera bacteria/archaea hists on Lola sample, as the following figure. <img width="1020" alt="Top30" src="https://github.com/Schroeder-Group/aDNA-course/MetaPhlanTop30Genera.png">
 
 ## Validation and Authentication
 
 1. Align reads to the GTDB database including representative reference genomes of bacteria, archaea, viruses and eukaryotes.
 
 ```
-bowtie2 -x gtdb-r202-organelles-viruses \
-    -p 8 \
-    -q -U GIL-1.fq.gz \
-    --maxins 500 --rg-id ILLUMINA-$SAMPLE --rg SM:$SAMPLE --rg PL:illumina --rg PU:ILLUMINA-$SAMPLE \
-    -k 16 --np 1 --mp "1,1" --rdg "0,1" --rfg "0,1" --score-min "L,0,-0.05" --very-sensitive --no-unal \
-    | samtools view -@ 24 -b -F 4 \
-    | samtools sort -@ 2 -O bam - > GIL-1.vanilla.sorted.bam
+cd ../
+mkdir -p Bowtie2
+cd Bowtie2
+cp /projects/course_sgbb20001/people/hsf378/Bowtie2/bowtie2.sh ./
+module load bowtie2/2.5.2 samtools/1.17
+sbatch bowtie2.sh
+```
+
+```
+FASTQ_DIRECTORY=/projects/course_sgbb20001/people/hsf378/Eager/results/samtools/filter
+SAMPLE=Lola
+DB=/projects/course_sgbb20001/data/databases/Vanilla/gtdb-r202-organelles-viruses
+
+bowtie2 -x $DB -U $FASTQ_DIRECTORY/$SAMPLE.unmapped.fastq.gz -p 10 --maxins 500 \
+        --rg-id ILLUMINA-$SAMPLE --rg SM:$SAMPLE \
+        --rg PL:illumina --rg PU:ILLUMINA-$SAMPLE -k 16 --np 1 \
+        --mp "1,1" --rdg "0,1" --rfg "0,1" --score-min "L,0,-0.05" \
+        --very-sensitive --no-unal  | samtools view -@ 10 -b -F 4 - | samtools sort -@ 10 -O bam - > $SAMPLE.vanilla.sorted.bam
 ```
 
 > Here the parameter `-k 16`: maximum 16 alignments per reads.
@@ -267,69 +171,44 @@ bowtie2 -x gtdb-r202-organelles-viruses \
 
 * Check the alignment results:
 
-> 10073353 reads; of these: <br/>
->   10073353 (100.00%) were unpaired; of these: <br/>
->     8532659 (84.71%) aligned 0 times <br/>
->     741841 (7.36%) aligned exactly 1 time <br/>
->     798853 (7.93%) aligned >1 times <br/>
-> 15.29% overall alignment rate <br/>
+> 7827212 reads; of these: <br/>
+>  7827212 (100.00%) were unpaired; of these: <br/>
+>    661246 (8.45%) aligned 0 times <br/>
+>    2446017 (31.25%) aligned exactly 1 time <br/>
+>    4719949 (60.30%) aligned >1 times <br/>
+> 91.55% overall alignment rate <br/>
 
-After the mapping steps, we will remove the duplicates reads with Picard MarkDuplicates.
-
-```
-module load picard/2.15.0
-picard MarkDuplicates I=GIL-1.vanilla.sorted.bam O=GIL-1.vanilla.rmdup.bam M=GIL-1.rmdup.txt AS=True REMOVE_DUPLICATES=True
-```
-
-> **Note:**
-> If we have multiple samples, we could run the alignment in parallel by using the following scripts
-
-<details><summary>Click</summary>
+After the mapping steps, we will remove the duplicates reads with samtools rmdup.
 
 ```
-#!/bin/bash
-#SBATCH -c 24
-#SBATCH --mem-per-cpu 10000
-#SBATCH --time 7-00
-#SBATCH --array=1-3%3 ##replace 3 with the number of samples you run
- 
-module load openjdk/13.0.1 bowtie2/2.4.2 picard/2.15.0
-
-FASTQ_DIRECTORY=/PATH TO SEQUENCING RESULTS/
-SAMPLE_LIST=/PATH TO SAMPLES/Samples.txt
-DB=/home/tmk528/data/db/Vanilla/gtdb-r202-organelles-viruses #/PATH TO THE DATABASE/prefix of the db index
-SAMPLE=$(sed -n "$SLURM_ARRAY_TASK_ID"p $SAMPLE_LIST)
-
-bowtie2 -x $DB -U $FASTQ_DIRECTORY/$SAMPLE.fq.gz -p 24 \
---maxins 500 --rg-id ILLUMINA-$SAMPLE --rg SM:$SAMPLE --rg PL:illumina --rg PU:ILLUMINA-$SAMPLE \ 
--k 16 --np 1 --mp "1,1" --rdg "0,1" --rfg "0,1" --score-min "L,0,-0.05" \
---very-sensitive --no-unal  | samtools view -@ 24 -b -F 4 - \
-| samtools sort -@ 2 -O bam - > $SAMPLE.vanilla.sorted.bam
-
-picard MarkDuplicates I=$SAMPLE.vanilla.sorted.bam O=$SAMPLE.vanilla.rmdup.bam M=$SAMPLE.rmdup.txt AS=True REMOVE_DUPLICATES=True
-
+samtools rmdup -s $SAMPLE.vanilla.sorted.bam $SAMPLE.vanilla.rmdup.bam
+samtools index $SAMPLE.vanilla.rmdup.bam
 ```
-
-</details>
 
 2. Filter out the noise from multiple aligned reads, and those reference genomes with uneven coverage by using FilterBAM.
 
 ```
-#!/bin/bash
-
-#SBATCH -c 24
-#SBATCH --mem-per-cpu 3000
-#SBATCH --time 7-00
-#SBATCH --array=1-3%3
-
-SAMPLE_LIST=/projects/mjolnir1/people/hsf378/data/Metagenomic_workshop/Samples.txt
-#DB=/home/tmk528/data/db/Vanilla/gtdb-r202-organelles-viruses
-DB=/projects/mjolnir1/data/databases/GTDB-Hires/2022-05-15/gtdb-r202-organelles-viruses-hires
-SAMPLE=$(sed -n "$SLURM_ARRAY_TASK_ID"p $SAMPLE_LIST)
-path=/projects/mjolnir1/people/hsf378/data/Metagenomic_workshop/filterBAM/hires/bowtie2
-
-filterBAM -t 24 -p $SAMPLE.hires -r $DB.len.map $path/$SAMPLE.hires.rmdup.bam
+cd ../
+mkdir -p filterbam
+cd filterbam
+cp /projects/course_sgbb20001/people/hsf378/filterbam/filterbam.sh ./
+conda activate /projects/course_sgbb20001/data/envs/bam-filterV2/
+sbatch filterbam.sh
 ```
+<details><summary>Click</summary>
+```
+BAM_DIRECTORY=/projects/course_sgbb20001/people/hsf378/Bowtie2
+SAMPLE=Lola
+
+filterBAM reassign --bam $BAM_DIRECTORY/$SAMPLE.vanilla.rmdup.bam  --threads 10 \
+        --iters 0 --min-read-ani 92 \
+        --reference-lengths /projects/course_sgbb20001/data/databases/Vanilla/gtdb-r202-organelles-viruses.len.map \
+        --out-bam $SAMPLE.reassigned.bam
+      
+filterBAM filter --bam $SAMPLE.reassigned.bam --bam-filtered $SAMPLE.dedup.filtered.bam \
+        --stats $SAMPLE.dedup.stats.tsv.gz --stats-filtered $SAMPLE.dedup.stats-filtered.tsv.gz --threads 10 --min-read-ani 92 --min-normalized-entropy 0.6
+```
+<details>
 
 For example on the GIL-1 sample:
 
@@ -351,26 +230,22 @@ For example on the GIL-1 sample:
 
 * Check how much noise did we filter out:
 
+
+
 ```
 ### The number of aligned reads
+samtools view -c ../Bowtie2/Lola.vanilla.rmdup.bam
+samtools view -c Lola.reassigned.bam
+samtools view -c Lola.dedup.filtered.bam
+```
+> 30251212 <br/>
+> 7154105 <br/>
+> 7108882 <br/>
 
-# 7,703,509
-samtools view -c ../bowtie2/GIL-1.hires.rmdup.bam
-# 6,888,515
-samtools view -c GIL-1.hires.filtered.bam 
 
+```
 ### The number of reference genomes
-
-# 57,576
-samtools view ../bowtie2/GIL-1.hires.rmdup.bam | cut -f3 | sort -u | wc -l
-# 20,858
-samtools view  GIL-1.hires.filtered.bam |cut -f3 | sort -u | wc -l
-
-# 22,010
-zcat GIL-1.hires_stats.tsv.gz | sed "1d"  | wc -l
-# 20,858
-zcat GIL-1.hires_stats-filtered.tsv.gz | sed "1d"  | wc -l
-
+tail -n 200 slurm*.out
 ```
 
 * Check the summary statistic result of filterBAM
@@ -379,6 +254,8 @@ zcat GIL-1.hires_stats-filtered.tsv.gz | sed "1d"  | wc -l
 # overview
 zcat GIL-1.hires_stats-filtered.tsv.gz | less -S
 # extract the columns we may be interested in
+module load csvtk
+
 zcat GIL-1.hires_stats-filtered.tsv.gz \
 | csvtk cut -t -T -f "reference,n_reads,read_ani_mean,read_ani_std,coverage_mean,breadth,breadth_exp_ratio,cov_evenness,tax_abund_read" \
 | csvtk sort -t -T -k "n_reads:Nr" | less -S
@@ -391,46 +268,35 @@ Here, we apply the metaDMG to estimate the damage over taxa within samples (LCA 
 * Load the metaDMG working environment
 
 ```
-conda activate /home/hsf378/.conda/envs/metaDMG
+mkdir -p metaDMG
+cd metaDMG
+cp /projects/course_sgbb20001/people/hsf378/metaDMG/metaDMG.sh ./
+conda activate /projects/course_sgbb20001/data/envs/metaDMG/
 ```
 * Generate the config file 
 
 ```
-metaDMG config --config-file meta_workshop.hires.lca.yaml \
-  --custom-database \
-  --names /home/tmk528/data/db/Vanilla/gtdb-r202-organelles-viruses/names.dmp \
-  --nodes /home/tmk528/data/db/Vanilla/gtdb-r202-organelles-viruses/nodes.dmp \
-  --acc2tax /home/tmk528/data/db/Vanilla/gtdb-r202-organelles-viruses/acc2taxid.map.gz \
-  --metaDMG-cpp /home/tmk528/data/bin/metaDMG-cpp/metaDMG-cpp \
-  --parallel-samples 1 \
-  --cores-per-sample 8 \
-  --output-dir ~/hsf378/data/Metagenomic_workshop/filterBAM/hires/metaDMG \ ### change the path
-  --max-position 15 \
-  --lca-rank '' ' ' \
-  --min-similarity-score 0.95 \
-  --max-similarity-score 1 \
-  --damage-mode lca \
-  --weight-type 1 \
-  --forward-only GIL-1.hires.filtered.bam HOR-1.hires.filtered.bam MSW-2765.hires.filtered.bam
+ metaDMG config --config-file Lola.vanilla.yaml --custom-database --names /projects/course_sgbb20001/data/databases/Vanilla/names.dmp --nodes /projects/course_sgbb20001/data/databases/Vanilla/nodes.dmp --acc2tax /projects/course_sgbb20001/data/databases/Vanilla/acc2taxid.map.gz --parallel-samples 1 --cores-per-sample 1 --output-dir /projects/course_sgbb20001/people/hsf378/metaDMG --max-position 15 --lca-rank '' ' ' --min-similarity-score 0.95 --max-similarity-score 1 --damage-mode lca --weight-type 1 --metaDMG-cpp /projects/course_sgbb20001/people/tmk528/bin/metaDMG-cpp --forward-only ../filterbam/Lola.dedup.filtered.bam
 ```
 
 * Compute the results
 
 ```
-sbatch metaDMG.hires.compute.sh
+sbatch metaDMG.sh
 ```
 
-<details><summary>The details on metaDMG.hires.compute.sh</summary>
+<details><summary>The details on metaDMG.sh</summary>
 
 ```
 #!/bin/bash
 
-#SBATCH -c 24
-#SBATCH --mem-per-cpu 8000
-#SBATCH --time=07:00:00
+#SBATCH -c 10
+#SBATCH --mem 100G
+#SBATCH --time 1-00
+#SBATCH --reservation=Course_SGBB20001
+#SBATCH --account=teaching
 
-conda activate /projects/mjolnir1/people/hsf378/.conda/envs/metaDMG
-metaDMG compute ~/hsf378/data/Metagenomic_workshop/filterBAM/hires/metaDMG/meta_workshop.hires.lca.yaml
+metaDMG compute Lola.vanilla.yaml
 
 ```
 
@@ -441,7 +307,7 @@ metaDMG compute ~/hsf378/data/Metagenomic_workshop/filterBAM/hires/metaDMG/meta_
 
 ```
 ssh -L 8050:localhost:8050 XXX@mjolnirhead01fl.unicph.domain
-conda activate /home/hsf378/.conda/envs/metaDMG
+conda activate /projects/course_sgbb20001/data/envs/metaDMG/
 metaDMG dashboard --results /PATH TO METADMG RESULTS FOLDER/ --port 8050 --server
 ```
   2. open your browser
@@ -450,14 +316,3 @@ metaDMG dashboard --results /PATH TO METADMG RESULTS FOLDER/ --port 8050 --serve
 http://localhost:8050/
 ```
 
-> **Note:**
-> Here is the final results for the filterBAM and 
->  ```
-> ln -s /projects/mjolnir1/people/hsf378/data/Metagenomic_workshop/filterBAM/
->  ```
-
-## Visualization
-
-**TBC**
-
-## Reference
