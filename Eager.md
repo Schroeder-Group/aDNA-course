@@ -147,7 +147,7 @@ cp /projects/course_sgbb20001/people/hsf378/Eager/input.tsv ./
 6. run Eager with the following code:
 
 ```
-nextflow run nf-core/eager -r 2.4.6 -profile mjolnir_globe --input input.tsv --fasta /projects/course_sgbb20001/data/databases/Human/hs.build37.1.fasta --fasta_index /projects/course_sgbb20001/data/databases/Human/hs.build37.1.fasta.fai --bwa_index /projects/course_sgbb20001/data/databases/Human --seq_dict /projects/course_sgbb20001/data/databases/Human/hs.build37.1.dict --bam_unmapped_type fastq --bam_mapping_quality_threshold 30 --run_bedtools_coverage --run_bam_filtering -with-tower -c /projects/course_sgbb20001/people/hsf378/Eager_testing.config --complexity_filter_poly_g -name XXX
+nextflow run nf-core/eager -r 2.4.6 -profile mjolnir_globe --input input.tsv --fasta /projects/course_sgbb20001/data/databases/Human/hs.build37.1.fasta --fasta_index /projects/course_sgbb20001/data/databases/Human/hs.build37.1.fasta.fai --bwa_index /projects/course_sgbb20001/data/databases/Human --seq_dict /projects/course_sgbb20001/data/databases/Human/hs.build37.1.dict --bam_unmapped_type fastq --bam_mapping_quality_threshold 30 --run_bedtools_coverage --run_bam_filtering -with-tower -c /projects/course_sgbb20001/people/hsf378/Eager_testing.config --complexity_filter_poly_g --anno_file /projects/course_sgbb20001/data/databases/Human/MT.bed -name eager_human 
 ```
 
 7. To follow up the status, you can check in Nextflow tower
