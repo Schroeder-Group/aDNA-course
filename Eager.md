@@ -137,6 +137,13 @@ module load singularity/3.8.7 openjdk/11.0.0 nextflow/22.10.4
 ```
 nextflow pull nf-core/eager -r 2.4.6
 ```
+
+5' create a folder and enter the folder
+```
+mkdir Eager
+cd Eager
+cp /projects/course_sgbb20001/people/hsf378/Eager/input.tsv ./
+```
 6. run Eager with the following code:
 
 ```
