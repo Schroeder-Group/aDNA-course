@@ -138,19 +138,19 @@ module load singularity/3.8.7 openjdk/11.0.0 nextflow/22.10.4
 nextflow pull nf-core/eager -r 2.4.6
 ```
 
-5' create a folder and enter the folder
+6. create a folder and enter the folder
 ```
 mkdir Eager
 cd Eager
 cp /projects/course_sgbb20001/people/hsf378/Eager/input.tsv ./
 ```
-6. run Eager with the following code:
+7. run Eager with the following code:
 
 ```
 nextflow run nf-core/eager -r 2.4.6 -profile mjolnir_globe --input input.tsv --fasta /projects/course_sgbb20001/data/databases/Human/hs.build37.1.fasta --fasta_index /projects/course_sgbb20001/data/databases/Human/hs.build37.1.fasta.fai --bwa_index /projects/course_sgbb20001/data/databases/Human --seq_dict /projects/course_sgbb20001/data/databases/Human/hs.build37.1.dict --bam_unmapped_type fastq --bam_mapping_quality_threshold 30 --run_bedtools_coverage --run_bam_filtering -with-tower -c /projects/course_sgbb20001/people/hsf378/Eager_testing.config --complexity_filter_poly_g --anno_file /projects/course_sgbb20001/data/databases/Human/MT.bed -name eager_human 
 ```
 
-7. To follow up the status, you can check in Nextflow tower
+8. To follow up the status, you can check in Nextflow tower
 
 If, an issue happens, and you see written 'failed', you can rerun your commands by adding at the end of the previous command '-resume'. It will run where it stops. You will have also to change the name.
 Please find below an example of the commands, if you need to rerun
@@ -158,8 +158,11 @@ Please find below an example of the commands, if you need to rerun
 ```
 nextflow run nf-core/eager -r 2.4.6 -profile mjolnir_globe --input input.tsv --fasta /projects/course_sgbb20001/data/databases/Human/hs.build37.1.fasta --fasta_index /projects/course_sgbb20001/data/databases/Human/hs.build37.1.fasta.fai --bwa_index /projects/course_sgbb20001/data/databases/Human --seq_dict /projects/course_sgbb20001/data/databases/Human/hs.build37.1.dict --bam_unmapped_type fastq --bam_mapping_quality_threshold 30 --run_bedtools_coverage --run_bam_filtering -with-tower -c /projects/course_sgbb20001/people/hsf378/Eager_testing.config --complexity_filter_poly_g -name YYY -resume
 ```
-
-8. In Nextflow tower, you should be to see if your run succeeded or not.
+9. To close the screen you created before, by pressing **ctrl A** and then **D**; In order to re-enter the screen, you could do this:
+    ```
+    screen -r 
+    ```
+10. In Nextflow tower, you should be to see if your run succeeded or not.
 
 If it succeeds, you should be able to see different statistics (e.g., fastqc, ect...).
 
