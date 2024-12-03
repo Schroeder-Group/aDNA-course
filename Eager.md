@@ -135,7 +135,7 @@ module load singularity/3.8.7 openjdk/11.0.0 nextflow/22.10.4
 5. when you are running at your first time, you need to pull the eager:
 
 ```
-nextflow pull nf-core/eager
+nextflow pull nf-core/eager -r 2.4.6
 ```
 6. run Eager with the following code:
 
