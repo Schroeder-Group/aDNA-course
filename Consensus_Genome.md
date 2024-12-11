@@ -35,13 +35,14 @@ Question3: How was the coverage evenness score?
 
 **Depth of coverage** measures the average number of reads covering each base in a specific region.
 
-$$ Depth of Coverage = {Total Bases Covered by Reads\over Region Length} $$
+$$ Depth\ of\ Coverage = {Total\ Bases\ Covered\ by\ Reads\over Region\ Length} $$
 
 Total Bases Covered by Reads: The sum of the coverage values across all positions in the region.
 Region Length: The total number of bases in the region.
 
 **Breadth of coverage** measures the proportion of a region that is covered by at least one read.
-$$ Breadth of coverage = {Number of Covered Bases\over Region Length} $$
+
+$$ Breadth\ of\ coverage = {Number\ of\ Covered\ Bases\over Regio\ Length} $$
 
 Number of Covered Bases: The number of bases in the region with at least one read mapped.
 
