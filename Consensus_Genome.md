@@ -32,6 +32,19 @@ Question3: How was the coverage evenness score?
 
 ### Visualization
 #### Genome coverage plot
+
+**Depth of coverage** measures the average number of reads covering each base in a specific region.
+
+$$ Depth of Coverage = {Total Bases Covered by Reads\over Region Length} $$
+
+Total Bases Covered by Reads: The sum of the coverage values across all positions in the region.
+Region Length: The total number of bases in the region.
+
+**Breadth of coverage** measures the proportion of a region that is covered by at least one read.
+$$ Breadth of coverage = {Number of Covered Bases\over Region Length} $$
+
+Number of Covered Bases: The number of bases in the region with at least one read mapped.
+
 1. calculate the depth of coverage at each position, and custom the format of the depth file.
 ```
 samtools depth -a target_species.bam > depth.txt
@@ -44,7 +57,20 @@ samtools view -H target_species.bam | grep "accession_id" |awk '$1 == "@SQ" {pri
 bedtools makewindows -g genome.txt -w 20000 > windows.bed
 bedtools map -a windows.bed -b depth_as_bed.txt -c 4 -o mean > window_depth.bed
 ```
-3. visulize the depth of coverage plot
+3. redo the previous steps, but we filtered out reads with mapping quality lower than 20
+```
+samtools view -q 20 target_species.bam -Sb > target_species.mq20.bam
+```
+Question: How many reads were filtered out?
+```
+samtools view -c target_species.mq20.bam
+```
+```
+samtools depth -a target_species.mq20.bam > depth_mq20.txt
+awk '{print $1, $2, $2, $3}' OFS="\t" depth_mq20.txt > depth_as_bed_mq20.txt
+bedtools map -a windows.bed -b depth_as_bed_mq20.txt -c 4 -o mean > window_depth_mq20.bed
+```
+4. visulize the depth of coverage plot
 ```
 conda activate /projects/course_sgbb20001/data/envs/Pathopipe
 Rscript coverage_plot.R
