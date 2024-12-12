@@ -73,6 +73,7 @@ bedtools map -a windows.bed -b depth_as_bed_mq20.txt -c 4 -o mean > window_depth
 ```
 4. visulize the depth of coverage plot
 ```
+module load conda
 conda activate /projects/course_sgbb20001/data/envs/Pathopipe
 Rscript coverage_plot.R
 ```
