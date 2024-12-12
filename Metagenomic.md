@@ -196,7 +196,7 @@ cd ../
 mkdir -p filterbam
 cd filterbam
 cp /projects/course_sgbb20001/people/hsf378/filterbam/filterbam.sh ./
-conda activate /projects/course_sgbb20001/data/envs/bam-filterV2/
+conda activate /projects/course_sgbb20001/people/tmk528/bin/bam-filterv2/
 sbatch filterbam.sh
 ```
 

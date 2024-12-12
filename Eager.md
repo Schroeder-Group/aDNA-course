@@ -23,10 +23,13 @@ Please find below important paths in Mjolnir to know before starting:
 ```
 For the first time Mjolnir user, please follow the following steps before starting any analysis.
 
-1. Copy the standard .bashrc and .bash_profile files to your home directory:
+1. set up the .bashrc file to your home directory:
 
 ```
 nano ~/.bashrc
+```
+
+```
 alias ll="ls -lhtra"
 alias xpinfo="squeue -S 'P,t,-p,i' --format '%.20i %.10Q %.20P %.16j %.8u %.10T %.10S %.10M %.10l %.6D %.5C %.10m %20R %80Z %k'
 "
@@ -34,7 +37,10 @@ alias xpjobs="squeue -S 'P,t,-p,i' --format '%.20i %.16j %.8u %.10T %.10M %.10l 
 alias xinfo="xpinfo -u $USER"
 alias xjobs="xpjobs -u $USER"
 ```
-
+2. create a soft link to your folder, **replcing the USERID to your KU-ID**
+```
+ln -sf /projects/course_sgbb20001/people/USERID ./data
+```
 
 #### Step 2: Before using Eager, you will need to do the following steps
 
@@ -53,6 +59,7 @@ alias xjobs="xpjobs -u $USER"
   export TOWER_ACCESS_TOKEN=$YOUR_TOKEN
   ```
 - Save the script by pressing **control + X** and then **Y**
+
 - Load it into environment
   ```
   source ~/.bashrc
@@ -65,25 +72,23 @@ alias xjobs="xpjobs -u $USER"
     ```
 - Copy and paste the following lines into your .bashrc or .bashprofile, remember to replace all the **USERID** to your KU-ID.
   ```
-  export TMPDIR='/projects/course_sgbb20001/USERID/tmp'
-  export TMP='/projects/course_sgbb20001/USERID/tmp'
-  export TEMP='/projects/course_sgbb20001/USERID/tmp'
-  export NXF_SINGULARITY_TMPDIR='/projects/course_sgbb20001/USERID/tmp'
-  export NXF_OPTS='-Djava.io.tmpdir=/projects/course_sgbb20001/USERID/tmp -Xms1g -Xmx4g'
-  export NXF_TEMP='/projects/course_sgbb20001/USERID/tmp'
-  export SINGULARITY_LOCALCACHEDIR='/projects/course_sgbb20001/USERID/tmp'
-  export SINGULARITY_TMPDIR='/projects/course_sgbb20001/USERID/tmp'
-  export SINGULARITY_LOCALCACHEDIR='/projects/course_sgbb20001/USERID/tmp'
-  export SINGULARITY_CACHEDIR='/projects/course_sgbb20001/USERID/tmp'
-  export SINGULARITY_TMPDIR='/projects/course_sgbb20001/USERID/tmp'
+  export TMPDIR='/projects/course_sgbb20001/people/USERID/tmp'
+  export TMP='/projects/course_sgbb20001/people/USERID/tmp'
+  export TEMP='/projects/course_sgbb20001/people/USERID/tmp'
+  export NXF_SINGULARITY_TMPDIR='/projects/course_sgbb20001/people/USERID/tmp'
+  export NXF_OPTS='-Djava.io.tmpdir=/projects/course_sgbb20001/people/USERID/tmp -Xms1g -Xmx4g'
+  export NXF_TEMP='/projects/course_sgbb20001/people/USERID/tmp'
+  export SINGULARITY_LOCALCACHEDIR='/projects/course_sgbb20001/people/USERID/tmp'
+  export SINGULARITY_TMPDIR='/projects/course_sgbb20001/people/USERID/tmp'
+  export SINGULARITY_LOCALCACHEDIR='/projects/course_sgbb20001/people/USERID/tmp'
+  export SINGULARITY_CACHEDIR='/projects/course_sgbb20001/people/USERID/tmp'
+  export SINGULARITY_TMPDIR='/projects/course_sgbb20001/people/USERID/tmp'
   mkdir -p $TMPDIR
   ```
 - Save the modified .bashrc or .bash_profile script by pressing **control X** and then **Y**. 
 - Load the set-up environment
   ```
   source ~/.bashrc
-  ### or
-  source ~/.bash_profile
   ```
 #### 3. Customize Eager config file
 A customized Eager config file is provided on the main page. 
@@ -135,15 +140,22 @@ module load singularity/3.8.7 openjdk/11.0.0 nextflow/22.10.4
 5. when you are running at your first time, you need to pull the eager:
 
 ```
-nextflow pull nf-core/eager
-```
-6. run Eager with the following code:
-
-```
-nextflow run nf-core/eager -r 2.4.6 -profile mjolnir_globe --input input.tsv --fasta /projects/course_sgbb20001/data/databases/Human/hs.build37.1.fasta --fasta_index /projects/course_sgbb20001/data/databases/Human/hs.build37.1.fasta.fai --bwa_index /projects/course_sgbb20001/data/databases/Human --seq_dict /projects/course_sgbb20001/data/databases/Human/hs.build37.1.dict --bam_unmapped_type fastq --bam_mapping_quality_threshold 30 --run_bedtools_coverage --run_bam_filtering -with-tower -c /projects/course_sgbb20001/people/hsf378/Eager_testing.config --complexity_filter_poly_g -name XXX
+nextflow pull nf-core/eager -r 2.4.6
 ```
 
-7. To follow up the status, you can check in Nextflow tower
+6. create a folder and enter the folder
+```
+mkdir Eager
+cd Eager
+cp /projects/course_sgbb20001/people/hsf378/Eager/input.tsv ./
+```
+7. run Eager with the following code:
+
+```
+nextflow run nf-core/eager -r 2.4.6 -profile mjolnir_globe --input input.tsv --fasta /projects/course_sgbb20001/data/databases/Human/hs.build37.1.fasta --fasta_index /projects/course_sgbb20001/data/databases/Human/hs.build37.1.fasta.fai --bwa_index /projects/course_sgbb20001/data/databases/Human --seq_dict /projects/course_sgbb20001/data/databases/Human/hs.build37.1.dict --bam_unmapped_type fastq --bam_mapping_quality_threshold 30 --run_bedtools_coverage --run_bam_filtering -with-tower -c /projects/course_sgbb20001/people/hsf378/Eager_testing.config --complexity_filter_poly_g --anno_file /projects/course_sgbb20001/data/databases/Human/MT.bed -name eager_human 
+```
+
+8. To follow up the status, you can check in Nextflow tower
 
 If, an issue happens, and you see written 'failed', you can rerun your commands by adding at the end of the previous command '-resume'. It will run where it stops. You will have also to change the name.
 Please find below an example of the commands, if you need to rerun
@@ -151,8 +163,11 @@ Please find below an example of the commands, if you need to rerun
 ```
 nextflow run nf-core/eager -r 2.4.6 -profile mjolnir_globe --input input.tsv --fasta /projects/course_sgbb20001/data/databases/Human/hs.build37.1.fasta --fasta_index /projects/course_sgbb20001/data/databases/Human/hs.build37.1.fasta.fai --bwa_index /projects/course_sgbb20001/data/databases/Human --seq_dict /projects/course_sgbb20001/data/databases/Human/hs.build37.1.dict --bam_unmapped_type fastq --bam_mapping_quality_threshold 30 --run_bedtools_coverage --run_bam_filtering -with-tower -c /projects/course_sgbb20001/people/hsf378/Eager_testing.config --complexity_filter_poly_g -name YYY -resume
 ```
-
-8. In Nextflow tower, you should be to see if your run succeeded or not.
+9. To close the screen you created before, by pressing **ctrl A** and then **D**; In order to re-enter the screen, you could do this:
+    ```
+    screen -r 
+    ```
+10. In Nextflow tower, you should be to see if your run succeeded or not.
 
 If it succeeds, you should be able to see different statistics (e.g., fastqc, ect...).
 
