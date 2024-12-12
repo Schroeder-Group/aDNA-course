@@ -87,6 +87,8 @@ Take a screen shot or save the pdf file for the metaDMG results.
 ```
 module load datasets
 datasets download genome accession XXXX
+cp /projects/course_sgbb20001/people/hsf378/genomes/ncbi_dataset/data/GCA_003665785.1* ./
+cp /projects/course_sgbb20001/people/hsf378/consensus/GCA_000195855.1.fasta ./
 ```
 **Replace the XXX to your target species genome accession id**
 
